@@ -87,6 +87,91 @@ GET '/categories'
 '5' : "Entertainment",
 '6' : "Sports"}
 
+GET '/questions'
+- Fetches aarray of dictionaries of all questions in which the keys are the ids, the body of the questionm the body of the correct answer, id of the corresponding category, and the level of the difficulty
+- Request Arguments: None
+- Returns: An array of all questions with details. 
+[{'id': 21, 
+'question': 'Who discovered penicillin?', 
+'answer': 'Alexander Fleming', 
+'category': 1, 
+'difficulty': 3}, ...]
+
+DELETE '/questions/<int:question_id>'
+- Delete specific question if exists based on the given id
+- Request Arguments: <question_id>
+-Returns: object that contain True if deletion succesed and the id of this question
+
+- if you use http://127.0.0.1:5000/questions/7 with method delete you will get the ressponse
+{
+    'success': True,
+    'deleted': 7,   
+}
+
+POST '/questions'
+- Create new question with its details
+- Request Arguments: Question body, Question answer, Question difficulty, Question category id
+- Returns: True if successed with the corresponding Id.
+- Try to post 'curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{"question":"Which team won the Champions League at 2014?", "answer":"Real Madrid"", "category":6, "difficulty": 2}'
+
+POST '/questions/search'
+- Search in questions based on part of its body
+- Request Arguments: <searchTerm>
+- Returns: Array of question objects that has this term in their body
+
+- if you try `curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{"searchTerm":"Whose"}`
+you will get this respons:
+{
+  "questions": [
+    {
+      "answer": "Whose autobiography is entitled I Know Why the Caged Bird Sings?",
+      "category": 4,
+      "difficulty": 2,
+      "id": 33,
+      "question": "Whose autobiography is entitled I Know Why the Caged Bird Sings?"
+    }
+  ],
+  "success": true,
+  "total_questions": 1
+}
+
+GET '/categories/<int:category_id>/questions'
+- Get array of questions under specific category
+- Request Arguments: <category_id>
+- Returns array of question objects that each has category_id equal argument
+
+- if you try '127.0.0.1:5000/categories/1/questions;
+you will get:
+[
+    {'id': 21, 'question': 'Who discovered penicillin?', 'answer': 'Alexander Fleming', 'category': 1, 'difficulty': 3}, 
+    {'id': 22, 'question': 'Hematology is a branch of medicine involving the study of what?', 'answer': 'Blood', 'category': 1, 'difficulty': 4}
+]
+
+POST '/quizzes'
+- Take empty or filled array of questions ids to return random questions of all or specific categgory to play trivia
+- Request Arguments: empty or filled array of questions ids
+- Returns: array of done questioons and category id
+- if you try curl http://127.0.0.1:5000/quizzes -XPOST -H "Content-Type: application/json" -d 
+'{
+    "quiz_category": {"type": "click","id": 0},
+    "previous_questions":
+    [22,17]
+}'
+you will get:
+{
+  "question": {
+    "answer": "best club", 
+    "category": 6, 
+    "difficulty": 1, 
+    "id": 26, 
+    "question": "best club"
+  }, 
+  "success": true
+}
+
+
+
+
 ```
 
 

@@ -66,7 +66,7 @@ def create_app(test_config=None):
     questions = [question.format() for question in questions]
     current_questions = questions[first:last]
     categories = {category.id: category.type for category in Category.query.all()} 
-    print(len(current_questions), len(questions), page)
+    print(questions)
     if current_questions is None or len(current_questions)==0: 
       abort(404)  
             
@@ -92,8 +92,8 @@ def create_app(test_config=None):
       question.delete()
                                         
       return jsonify({
-          'success': True,
-          'deleted': question_id,   
+        'success': True,
+        'deleted': question_id,   
       })
     except:
       abort(422)
@@ -152,7 +152,6 @@ def create_app(test_config=None):
         'total_questions':len(questions), 
       })
     else:
-      print('rrrrrrrrrrrr')
       abort(404)
   '''
   @TODO: 
@@ -172,7 +171,8 @@ def create_app(test_config=None):
     first = (page - 1) * 10
     last = first + 10
     questions = [question.format() for question in questions]
-    current_questions = questions[first:last]    
+    current_questions = questions[first:last] 
+    print(current_questions)   
     return jsonify({
       'success': True,
       'questions':current_questions,
@@ -191,23 +191,24 @@ def create_app(test_config=None):
   '''
   @app.route('/quizzes', methods=['POST'])
   def play_quiz():
-    body = request.get_json()
+    body = request.json 
     category = body.get('quiz_category',None)
     previous_questions = body.get('previous_questions', None)
+    
     try:
-      if category.get('id'): 
+      if category.get('id'):
         questions = Question.query.filter(Question.category == category.get('id')).all()
       else:
         questions = Question.query.all()
                 
-      if questions is None or len(questions) == 0: 
-          return jsonify({
-            'question': None
-          })  
+      if questions is None or len(questions) == 0:
+        return jsonify({
+          'question': None
+        })  
 
       questions= [question.format() for question in questions if question.id not in previous_questions] 
       
-      if questions is None or len(questions)==0: 
+      if questions is None or len(questions)==0:
         return jsonify({
           'question': None
         }) 
@@ -219,7 +220,7 @@ def create_app(test_config=None):
         'question': question
       })
         
-    except:
+    except: 
       abort(422)
   '''
   @TODO: 
@@ -229,6 +230,7 @@ def create_app(test_config=None):
 
   @app.errorhandler(400)
   def bad_request(error):
+    print(error)
     return jsonify({
       "success":False,
       "error":400,
